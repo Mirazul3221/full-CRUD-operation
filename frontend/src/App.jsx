@@ -1,7 +1,15 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Register from "./pages/Register";
+
 export default function App() {
   return (
-    <h1 className="text-3xl text-amber-500 font-bold underline">
-      Hello world!
-    </h1>
+    <div className="min-h-screen min-w-screen bg-rose-100">
+      
+      <BrowserRouter>
+        <Routes>
+          <Route path="/register" element={<Register/>} />
+        </Routes>
+      </BrowserRouter>
+</div>
   )
 }
