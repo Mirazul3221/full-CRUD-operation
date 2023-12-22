@@ -16,7 +16,10 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data } = await axios.post(`${base_url}/auth/user/register`, state);
+    const { data } = await axios.post(
+      `${base_url}/api/auth/user/register`,
+      state
+    );
     console.log(data);
   };
   return (

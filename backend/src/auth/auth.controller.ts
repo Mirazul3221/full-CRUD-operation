@@ -8,17 +8,17 @@ import {
   Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { CreateUserDto } from './dto/register.dto';
+import { UpdateAuthDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/user/register')
-  create(@Body() createAuthDto: CreateAuthDto) {
-    console.log(createAuthDto);
-    return this.authService.create(createAuthDto);
+  async register(@Body() createUserDto: CreateUserDto) {
+    console.log(createUserDto);
+    return await this.authService.register_user(createUserDto);
   }
 
   @Get()
