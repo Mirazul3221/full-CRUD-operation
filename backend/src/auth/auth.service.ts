@@ -5,14 +5,18 @@ import { InjectModel } from '@nestjs/mongoose';
 import { user, user_model } from './Schema/user.schema';
 import mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(user_model)
     private userModel: mongoose.Model<user>,
+    private JwtService: JwtService,
   ) {}
-  async register_user(createUserDto: CreateUserDto) {
+  async register_user(
+    createUserDto: CreateUserDto,
+  ): Promise<{ token: string; message: string }> {
     const { name, email, password } = createUserDto;
     const userInfo = await this.userModel.findOne({ email });
     if (userInfo) {
@@ -23,8 +27,12 @@ export class AuthService {
         email: email.trim(),
         password: await bcrypt.hash(password, 9),
       });
+      const token = await this.JwtService.sign({
+        _id: (await new_user).id,
+        name: (await new_user).name,
+      });
+      return { token, message: 'User register success' };
     }
-    return 'This action adds a new auth';
   }
 
   findAll() {
