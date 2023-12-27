@@ -6,16 +6,18 @@ import {
   Patch,
   Param,
   Delete,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/register.dto';
+import { CreateLoginDto, CreateUserDto } from './dto/register.dto';
 import { UpdateAuthDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
   @Post('/user/register')
+  @UsePipes(ValidationPipe)
   async register(
     @Body() createUserDto: CreateUserDto,
   ): Promise<{ token: string; message: string }> {
@@ -23,9 +25,9 @@ export class AuthController {
     return await this.authService.register_user(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  @Post('/user/login')
+ async login( @Body() createLoginDto: CreateLoginDto) : Promise<{ token: string; message: string }> {
+    return await this.authService.loginInfo(createLoginDto);
   }
 
   @Get(':id')

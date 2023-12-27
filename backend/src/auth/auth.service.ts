@@ -1,5 +1,5 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/register.dto';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { CreateLoginDto, CreateUserDto } from './dto/register.dto';
 import { UpdateAuthDto } from './dto/login.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { user, user_model } from './Schema/user.schema';
@@ -15,8 +15,8 @@ export class AuthService {
     private JwtService: JwtService,
   ) {}
   async register_user(
-    createUserDto: CreateUserDto,
-  ): Promise<{ token: string; message: string }> {
+    createUserDto,
+  ) : Promise<{ token: string; message: string }> {
     const { name, email, password } = createUserDto;
     const userInfo = await this.userModel.findOne({ email });
     if (userInfo) {
@@ -28,15 +28,34 @@ export class AuthService {
         password: await bcrypt.hash(password, 9),
       });
       const token = await this.JwtService.sign({
-        _id: (await new_user).id,
+        id: (await new_user).id,
         name: (await new_user).name,
       });
       return { token, message: 'User register success' };
     }
   }
 
-  findAll() {
-    return `This action returns all auth`;
+
+
+  async loginInfo(createLoginDto:CreateLoginDto) : Promise<{ token: string; message: string }> {
+    const {email, password } = createLoginDto;
+    const loginInfo = await this.userModel.findOne({ email }).select("+password");
+
+    if (loginInfo) {
+      const check_password =await bcrypt.compare(password,loginInfo.password)
+     if (check_password) {
+      const token = await this.JwtService.sign({
+        id: (await loginInfo).id,
+        name: (await loginInfo).name,
+      });
+      return { token, message: 'User login success' };
+     } else {
+        throw new UnauthorizedException("password invalied")
+     }
+
+    }else {
+       throw new NotFoundException("User not found")
+    }
   }
 
   findOne(id: number) {

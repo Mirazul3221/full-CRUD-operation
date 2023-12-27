@@ -12,3 +12,12 @@ export class CreateUserDto {
   @MinLength(6)
   readonly password: string;
 }
+
+export class CreateLoginDto{
+  @IsNotEmpty()
+  @IsEmail({}, { message: 'Please Provide valid email' })
+  readonly email: string;
+  @IsNotEmpty()
+  @MinLength(6)
+  readonly password: string;
+}

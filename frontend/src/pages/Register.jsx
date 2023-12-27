@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { base_url } from "../utils/config";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 const Register = () => {
   const [state, setState] = useState({
     name: "",
@@ -22,10 +22,30 @@ const Register = () => {
         `${base_url}/api/auth/user/register`,
         state
       );
+      console.log(data)
       localStorage.setItem("crud_token", data.token);
-      toast.success(data.message);
+      toast.success(data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     } catch (error) {
-      toast.error(error.response.data.message);
+      // toast.error(error.response.data.message);
+        toast.error(error.response.data.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
     }
   };
   return (
@@ -36,7 +56,6 @@ const Register = () => {
           <div className="flex flex-col w-full mb-2">
             <label htmlFor="name">Name</label>
             <input
-              required
               onChange={inputHandle}
               value={state.name}
               type="text"
