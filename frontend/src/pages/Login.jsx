@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { base_url } from "../utils/config";
 import { toast } from "react-toastify";
+import storeContext from "../context/storeContext";
+import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
+  const naigate = useNavigate();
+  const { dispatch } = useContext(storeContext);
+
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -14,15 +19,18 @@ const Login = () => {
     });
   };
 
+  const [lodre, setLoder] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(state)
+    console.log(state);
     try {
+      setLoder(true);
       const { data } = await axios.post(
         `${base_url}/api/auth/user/login`,
         state
       );
-      console.log(data)
+      setLoder(false);
+      console.log(data);
       localStorage.setItem("crud_token", data.token);
       toast.success(data.message, {
         position: "top-center",
@@ -33,19 +41,23 @@ const Login = () => {
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
+      });
+
+      dispatch({ type: "login_success", payload: { token: data.token } });
+      naigate("/");
     } catch (error) {
+      setLoder(false);
       // toast.error(error.response.data.message);
-        toast.error(error.response.data.message, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          });
+      toast.error(error.response.data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
   return (
@@ -80,12 +92,21 @@ const Login = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="btn w-full py-2 text-center bg-sky-500 rounded-md mt-4 cursor-pointer text-white"
-          >
-            Login
-          </button>
+          <div className="flex gap-5">
+            <button
+              disabled={lodre}
+              type="submit"
+              className="btn w-full py-2 text-center bg-sky-500 rounded-md mt-4 cursor-pointer text-white"
+            >
+              {lodre ? "Loading..." : "Login"}
+            </button>
+            <Link
+              to={"/register"}
+              className="btn w-full py-2 text-center bg-sky-500 rounded-md mt-4 cursor-pointer text-white"
+            >
+              Register
+            </Link>
+          </div>
         </form>
       </div>
     </div>
@@ -93,4 +114,3 @@ const Login = () => {
 };
 
 export default Login;
-

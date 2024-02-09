@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { base_url } from "../utils/config";
-import { toast } from "react-toastify";
+import { toast as some } from "react-toastify";
+import toast from "react-hot-toast";
+import storeContext from "../context/storeContext";
+import { useNavigate } from "react-router-dom";
 const Register = () => {
+  const naigate = useNavigate()
+const {dispatch} = useContext(storeContext)
   const [state, setState] = useState({
     name: "",
     email: "",
@@ -24,7 +29,7 @@ const Register = () => {
       );
       console.log(data)
       localStorage.setItem("crud_token", data.token);
-      toast.success(data.message, {
+      some.success(data.message, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -33,10 +38,15 @@ const Register = () => {
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
+      });  
+      dispatch({type:"register_success", payload:{token:data.token}})
+      naigate("/")
     } catch (error) {
+      console.log(error)
+      let err = error.response.data.message[0];
       // toast.error(error.response.data.message);
-        toast.error(error.response.data.message, {
+       if (err == "U") {
+        some.error( error.response.data.message, {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -46,6 +56,18 @@ const Register = () => {
           progress: undefined,
           theme: "light",
           });
+       } else {
+        some.error( err, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+       }
     }
   };
   return (

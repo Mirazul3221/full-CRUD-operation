@@ -10,8 +10,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateLoginDto, CreateUserDto } from './dto/register.dto';
-import { UpdateAuthDto } from './dto/login.dto';
+import { CreateUserDto } from './dto/register.dto';
+import { CreateLoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -26,6 +26,7 @@ export class AuthController {
   }
 
   @Post('/user/login')
+  @UsePipes(ValidationPipe)
  async login( @Body() createLoginDto: CreateLoginDto) : Promise<{ token: string; message: string }> {
     return await this.authService.loginInfo(createLoginDto);
   }
@@ -35,10 +36,10 @@ export class AuthController {
     return this.authService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  //   return this.authService.update(+id, updateAuthDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
