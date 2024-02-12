@@ -23,6 +23,7 @@ export class PostService {
     const data = await cloudinary.uploader.upload(image.path)
     const new_post = await this.postModel.create(
       {
+        user_id:userInfo._id,
         title,
         description,
         image:data.url
@@ -38,6 +39,10 @@ export class PostService {
   async findAll(userInfo) {
     const allPost = await this.postModel.find()
     return allPost;
+  }
+  async findMyPost(userInfo) {
+    const myPost = await this.postModel.find({user_id : new mongoose.mongo.ObjectId(userInfo._id)})
+    return myPost;
   }
 
   findOne(id: number) {

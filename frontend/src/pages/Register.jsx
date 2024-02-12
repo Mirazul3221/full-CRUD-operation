@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 import storeContext from "../context/storeContext";
 import { useNavigate } from "react-router-dom";
 const Register = () => {
-  const naigate = useNavigate()
-const {dispatch} = useContext(storeContext)
+  const naigate = useNavigate();
+  const { dispatch } = useContext(storeContext);
   const [state, setState] = useState({
     name: "",
     email: "",
@@ -27,7 +27,7 @@ const {dispatch} = useContext(storeContext)
         `${base_url}/api/auth/user/register`,
         state
       );
-      console.log(data)
+      console.log(data);
       localStorage.setItem("crud_token", data.token);
       some.success(data.message, {
         position: "top-center",
@@ -38,15 +38,15 @@ const {dispatch} = useContext(storeContext)
         draggable: true,
         progress: undefined,
         theme: "light",
-      });  
-      dispatch({type:"register_success", payload:{token:data.token}})
-      naigate("/")
+      });
+      dispatch({ type: "register_success", payload: { token: data.token } });
+      naigate("/");
     } catch (error) {
-      console.log(error)
+      console.log(error);
       let err = error.response.data.message[0];
       // toast.error(error.response.data.message);
-       if (err == "U") {
-        some.error( error.response.data.message, {
+      if (err == "U") {
+        some.error(error.response.data.message, {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -55,9 +55,9 @@ const {dispatch} = useContext(storeContext)
           draggable: true,
           progress: undefined,
           theme: "light",
-          });
-       } else {
-        some.error( err, {
+        });
+      } else {
+        some.error(err, {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -66,13 +66,13 @@ const {dispatch} = useContext(storeContext)
           draggable: true,
           progress: undefined,
           theme: "light",
-          });
-       }
+        });
+      }
     }
   };
   return (
     <div className="flex justify-center items-center w-screen h-screen p-20">
-      <div className="w-4/12 bg-white rounded-md p-10">
+      <div className="md:w-4/12 bg-white rounded-md p-10">
         <h2 className="text-center">CRUD</h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col w-full mb-2">

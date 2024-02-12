@@ -10,17 +10,26 @@ import { post } from './schema/post.schema';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @Post('/create')
-    // @UseGuards(AuthGuard())
-    @FormDataRequest({storage:FileSystemStoredFile})
+  @Post('create')
+  @UseGuards(AuthGuard())
+  @FormDataRequest({storage:FileSystemStoredFile})
   create(@Body() createPostDto: CreatePostDto,@Req() req) :  Promise <{post:post, message:string}> {
-    console.log(createPostDto)
+    // console.log(req.user._id)
     return this.postService.create(createPostDto, req.user);
   }
-
+  
+  @UseGuards(AuthGuard())
   @Get('/all')
   findAll(@Req() req) {
-    return this.postService.findAll(req);
+    console.log(req.user)
+    return this.postService.findAll(req.user);
+  }
+
+  @UseGuards(AuthGuard())
+  @Get('me')
+  findMyPost(@Req() req) {
+    console.log(req.user)
+    return this.postService.findMyPost(req.user);
   }
 
   @Get(':id')

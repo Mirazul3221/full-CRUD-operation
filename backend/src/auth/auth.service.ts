@@ -25,7 +25,7 @@ export class AuthService {
       const new_user = this.userModel.create({
         name: name.trim(),
         email: email.trim(),
-        password: await bcrypt.hash(password, 4),
+        password: await bcrypt.hash(password, 9),
       });
       const token = await this.JwtService.sign({
         _id: (await new_user).id,

@@ -10,7 +10,7 @@ export class CreatePostDto {
     @IsNotEmpty()
     readonly description: string
     @IsFile()
-    @MaxFileSize(1e6, { message: "File size must be less than 1 MB" })
+    @MaxFileSize(10e6, { message: "File size must be less than 1 MB" })
         @HasMimeType(['image/jpeg','image/png','image/jpg'])
     image:FileSystemStoredFile
 }

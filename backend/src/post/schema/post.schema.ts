@@ -5,7 +5,7 @@ import mongoose, { Document } from "mongoose";
 )
 
 export class post extends Document {
-    @Prop({type:mongoose.Schema.Types.ObjectId})
+    @Prop({type:mongoose.Schema.Types.ObjectId,ref:'users',requiredPaths:true})
     user_id: mongoose.Schema.Types.ObjectId
     @Prop({required:true})
     title: string

@@ -16,7 +16,11 @@ const Header = () => {
     <div className="py-2 bg-white text-center text-grat-700">
       <div className="w-[80%] mx-auto flex justify-between items-center">
         <Link to={"/"}>
-          {store.userInfo ? <h2>{store.userInfo.name}</h2> : <h2>Sorry</h2>}
+          {store.userInfo ? (
+            <h2 className="text-sky-500 font-bold">{store.userInfo.name}</h2>
+          ) : (
+            <h2>Sorry</h2>
+          )}
         </Link>
         <ul className="flex gap-4">
           <li>

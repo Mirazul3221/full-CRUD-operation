@@ -5,7 +5,9 @@ import { useContext } from "react";
 import axios from "axios";
 import { base_url } from "../../utils/config";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const Create = () => {
+  const redirect = useNavigate();
   const { store } = useContext(storeContext);
   const [state, setState] = useState({
     title: "",
@@ -70,6 +72,7 @@ const Create = () => {
         theme: "light",
       });
     }
+    redirect("/user/all");
   };
   return (
     <div className="">

@@ -62,8 +62,10 @@ const Login = () => {
   };
   return (
     <div className="flex justify-center items-center w-screen h-screen p-20">
-      <div className="w-4/12 bg-white rounded-md p-10">
-        <h2 className="text-center">CRUD</h2>
+      <div className="md:w-4/12 bg-white rounded-md p-10 shadow-lg">
+        <h2 className="text-center text-3xl font-bold text-sky-500 mb-3">
+          My Book
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col w-full mb-2">
             <label htmlFor="email">Email</label>
