@@ -31,7 +31,9 @@ export class AuthService {
         _id: (await new_user).id,
         name: (await new_user).name,
       });
-      return { token, message: 'User register success' };
+      const user =await this.userModel.findOne({ name })
+      const userName = user.name;
+      return { token, message: `Hey ${userName}, Welcome To My Plateform` };
     }
   }
 

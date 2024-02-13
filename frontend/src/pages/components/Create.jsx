@@ -6,7 +6,9 @@ import axios from "axios";
 import { base_url } from "../../utils/config";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import img from "../../preloder/preloder-for-button.gif";
 const Create = () => {
+  const [loader, setLoader] = useState(false);
   const redirect = useNavigate();
   const { store } = useContext(storeContext);
   const [state, setState] = useState({
@@ -40,6 +42,7 @@ const Create = () => {
     formData.append("description", state.description);
     formData.append("image", state.image);
     try {
+      setLoader(true);
       const { data } = await axios.post(
         `${base_url}/api/post/create`,
         formData,
@@ -49,6 +52,7 @@ const Create = () => {
           },
         }
       );
+      setLoader(false);
       toast.success(data.message, {
         position: "top-center",
         autoClose: 5000,
@@ -61,6 +65,7 @@ const Create = () => {
       });
       console.log(data);
     } catch (error) {
+      setLoader(false);
       toast.error(error.response.data.message, {
         position: "top-center",
         autoClose: 5000,
@@ -90,6 +95,7 @@ const Create = () => {
               name="title"
               id="title"
               placeholder="title"
+              required
               className="outline-none px-4 py-[5px] border-[1px] rounded-md focus:border-sky-500 duration-300"
             />
           </div>
@@ -102,12 +108,14 @@ const Create = () => {
               name="description"
               id="description"
               placeholder="description"
+              required
               className="outline-none px-4 py-[5px] border-[1px] rounded-md focus:border-sky-500 duration-300"
             ></textarea>
           </div>
           <div className="flex flex-col w-full mb-2">
             <label htmlFor="image">Image</label>
             <input
+              required
               onChange={imageHandler}
               type="file"
               id="image"
@@ -122,10 +130,20 @@ const Create = () => {
             </div>
           )}
           <button
+            disabled={loader}
             type="submit"
             className="btn w-full py-2 text-center bg-sky-500 rounded-md mt-4 cursor-pointer text-white"
           >
-            Create
+            {loader ? (
+              <>
+                {" "}
+                <div className="flex justify-center items-center">
+                  <img className="w-32" src={img} alt="" />
+                </div>{" "}
+              </>
+            ) : (
+              "Create"
+            )}
           </button>
         </form>
       </div>
